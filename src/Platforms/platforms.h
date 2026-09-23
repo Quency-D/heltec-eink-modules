@@ -9,6 +9,7 @@
 #include "Platforms/WirelessPaper/WirelessPaper.h"
 #include "Platforms/VisionMasterE213/VisionMasterE213.h"
 #include "Platforms/VisionMasterE290/VisionMasterE290.h"
+#include "Platforms/HeltecRC52/HeltecRC52.h"
 
 #include "Platforms/M328P/M328P.h"
 #include "Platforms/ESP32/ESP32.h"

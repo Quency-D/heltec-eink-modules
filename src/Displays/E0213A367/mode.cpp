@@ -1,6 +1,9 @@
 #include "E0213A367.h"
 
 void E0213A367::configFull() {
+    if (operation_timed_out)
+        return;
+
     // This command (0x37) is poorly documented
     // Purpose is to specify which of the pre-programmed waveforms are for full refresh, and which are for fast refresh (?)
     sendCommand(0x37); // "Write Register for Display Option" ?
@@ -16,6 +19,9 @@ void E0213A367::configFull() {
 }
 
 void E0213A367::configPartial() {
+    if (operation_timed_out)
+        return;
+
     // This command (0x37) is poorly documented
     // Purpose is to specify which of the pre-programmed waveforms are for full refresh, and which are for fast refresh (?)
     sendCommand(0x37); // "Write Register for Display Option" ?

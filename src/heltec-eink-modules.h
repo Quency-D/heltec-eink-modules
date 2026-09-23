@@ -16,6 +16,7 @@
 #include "Displays/QYEG0213RWS800/QYEG0213RWS800.h"     // Heltec 2.13" RED V2  - Red Tab
 #include "Displays/DEPG0290BNS75A/DEPG0290BNS75A.h"     // Heltec 2.9" BW V2    - Red Tab
 #include "Displays/DEPG0290BNS800/DEPG0290BNS800.h"     // Heltec 2.9" BW V2    - Red Tab
+#include "Displays/DEPG1020BNS770F1/DEPG1020BNS770F1.h" // Heltec 10.2" BW      - SSD1677
 #include "Displays/GDE029A1/GDE029A1.h"                 // Heltec 2.9" BW V2    - Blue tab
 
 // All-in-one boards

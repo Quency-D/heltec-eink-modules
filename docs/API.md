@@ -8,6 +8,7 @@
   - [`DEPG0213RWS800()`](#depg0213rws800)
   - [`DEPG0290BNS75A()`](#depg0290bns75a)
   - [`DEPG0290BNS800()`](#depg0290bns800)
+  - [`DEPG1020BNS770F1()`](#depg1020bns770f1)
   - [`E0213A367()`](#e0213a367)
   - [`EInkDisplay_VisionMasterE213`](#einkdisplay_visionmastere213)
   - [`EInkDisplay_VisionMasterE213V1_1`](#einkdisplay_visionmastere213v1_1)
@@ -283,22 +284,87 @@ DEPG0290BNS800 display(2, 4, 5);
 ```
 
 ___
+### `DEPG1020BNS770F1()`
+
+Create a display controller object for the 960 x 640 monochrome
+`DEPG1020BNS770F1` panel on an SSD1677 driver board.
+
+#### Syntax
+
+```cpp
+DEPG1020BNS770F1(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE)
+DEPG1020BNS770F1(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE, page_height)
+DEPG1020BNS770F1(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE, SDI_PIN, CLK_PIN)
+DEPG1020BNS770F1(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE, SDI_PIN, CLK_PIN, page_height)
+```
+
+#### Parameters
+
+* _DC_PIN_: pin connected to the driver board D/C pin.
+* _CS_PIN_: pin connected to the driver board CS pin.
+* _BUSY_PIN_: pin connected to the driver board BUSY pin. BUSY is active high.
+* _RESET_PIN_: pin connected to the driver board reset pin.
+* _ENABLE_PIN_: pin controlling power to the driver board.
+* _ENABLE_ACTIVE_: `HIGH` for an active-high enable or `LOW` for an active-low enable.
+* _SDI_PIN_: optional SPI MOSI/SDI pin on platforms that support movable SPI pins.
+* _CLK_PIN_: optional SPI clock pin on platforms that support movable SPI pins.
+* _page_height_ (optional): rows rendered at a time. `32` uses 3,840 bytes; a full framebuffer uses 76,800 bytes.
+
+This driver supports monochrome full-screen refresh only. `fastmodeOn()` and
+`fastmodeTurbo()` intentionally select full refresh. BUSY waits time out after 60
+seconds; `timedOut()` reports that condition. The driver enters deep sleep and
+disables the driver board after each completed refresh.
+
+#### Example
+
+```cpp
+#include <heltec-eink-modules.h>
+
+// RD02E on Heltec RC32: DC, CS, BUSY, RST, EN, EN-active, MOSI, SCK, page rows
+DEPG1020BNS770F1 display(5, 2, 6, 4, 21, LOW, 47, 48, 32);
+```
+
+___
 ### `E0213A367()`
-Create a display controller object, for model E0213A367, which is used on Wireless Paper V1.1.1, V1.2 and Vision Master E213 V1.1 all-in-one boards.
+Create a display controller object for model E0213A367. The no-argument form is
+used on Wireless Paper V1.1.1, V1.2 and Vision Master E213 V1.1 all-in-one
+boards. Full-pin constructors support external driver boards with switched power
+and reset controls.
 
 *`EInkDisplay_WirelessPaperV1_1_1`, `EInkDisplay_WirelessPaperV1_2` and `EInkDisplay_VisionMasterE213V1_1` are aliases for this class.*
 
-Display instances of this class should be declared without parentheses, or they will be mistaken for a function prototype. See example.
+No-argument display instances should be declared without parentheses, or they
+will be mistaken for a function prototype. See examples.
 
 #### Syntax
 
 ```cpp
 E0213A367
+E0213A367(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE)
+E0213A367(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE, page_height)
+E0213A367(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE, SDI_PIN, CLK_PIN)
+E0213A367(DC_PIN, CS_PIN, BUSY_PIN, RESET_PIN, ENABLE_PIN, ENABLE_ACTIVE, SDI_PIN, CLK_PIN, page_height)
 ```
 
 #### Parameters
 
-None.
+The all-in-one form has no parameters.
+
+* _DC_PIN_: pin connected to the driver board D/C pin.
+* _CS_PIN_: pin connected to the driver board CS pin.
+* _BUSY_PIN_: pin connected to the driver board active-high BUSY pin.
+* _RESET_PIN_: pin connected to the driver board active-low reset pin.
+* _ENABLE_PIN_: pin controlling power to the external driver board.
+* _ENABLE_ACTIVE_: `HIGH` for active-high power control or `LOW` for active-low power control.
+* _SDI_PIN_: optional SPI MOSI/SDI pin on platforms that support movable SPI pins.
+* _CLK_PIN_: optional SPI clock pin on platforms that support movable SPI pins.
+* _page_height_ (optional): number of rows rendered at a time. A 32-row E0213A367 page uses 512 bytes.
+
+External-driver mode powers and hard-resets the display whenever a refresh mode
+is selected. BUSY waits time out after 60 seconds; `timedOut()` reports the
+failure and the driver switches external power off. A successful refresh leaves
+external power enabled. All-in-one constructors retain their existing platform
+power, reset and BUSY-wait behavior.
 
 #### Example
 
@@ -306,6 +372,9 @@ None.
 #include <heltec-eink-modules.h>
 
 E0213A367 display;
+
+// RD02E on Heltec RC32: DC, CS, BUSY, RST, EN, EN-active, MOSI, SCK, page rows
+E0213A367 externalDisplay(5, 2, 6, 4, 21, LOW, 47, 48, 32);
 ```
 
 ___

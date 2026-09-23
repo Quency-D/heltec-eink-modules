@@ -125,20 +125,20 @@ void BaseDisplay::sendImageData() {
 
         // Send black
         sendCommand(0x24);   // Write "BLACK" memory
-        for (uint16_t i = 0; i < pagefile_length; i++)
+        for (uint32_t i = 0; i < pagefile_length; i++)
             sendData(page_black[i]);
 
         // If supports red, send red
         if ( supportsColor(RED) ) {   // If 3-Color red display
             sendCommand(0x26);          // Write memory for red(1)/white (0)
-            for (uint16_t i = 0; i < pagefile_length; i++)
+            for (uint32_t i = 0; i < pagefile_length; i++)
                 sendData(page_red[i]);
         }
 
         // If mono, send black data to red memory, for future partial refresh (differential update)
         else {
             sendCommand(0x26);   
-                for (uint16_t i = 0; i < pagefile_length; i++)
+                for (uint32_t i = 0; i < pagefile_length; i++)
                     sendData(page_black[i]);            
         }
     }
@@ -149,7 +149,7 @@ void BaseDisplay::sendImageData() {
     else if (!fastmode_secondpass) {
         // Send black
         sendCommand(0x24);   // Write "BLACK" memory
-        for (uint16_t i = 0; i < pagefile_length; i++)
+        for (uint32_t i = 0; i < pagefile_length; i++)
             sendData(page_black[i]);
     }
 
@@ -158,7 +158,7 @@ void BaseDisplay::sendImageData() {
     else {
         // Send black data to red memory, for differential update
         sendCommand(0x26);
-        for (uint16_t i = 0; i < pagefile_length; i++)
+        for (uint32_t i = 0; i < pagefile_length; i++)
             sendData(page_black[i]);
     }
 }
@@ -174,17 +174,17 @@ void BaseDisplay::sendBlankImageData() {
         red_byte = black_byte;
 
     // Determine how many bytes to write
-    uint16_t pagefile_size = (panel_width / 8) * panel_height;
+    uint32_t pagefile_size = (uint32_t) (panel_width / 8) * panel_height;
 
     // Write the data
     sendCommand(0x24);   // Write "BLACK" memory
-    for (uint16_t i = 0; i < pagefile_size; i++)
+    for (uint32_t i = 0; i < pagefile_size; i++)
         sendData(black_byte);
 
     // Also write the RED memory, so long as we're not clearing in fastmode (breaks differential update)
     if (fastmode_state == OFF || fastmode_state == NOT_SET) {
         sendCommand(0x26);  // Write "RED" memory
-        for (uint16_t i = 0; i < pagefile_size; i++)
+        for (uint32_t i = 0; i < pagefile_size; i++)
             sendData(red_byte);
     }
 }

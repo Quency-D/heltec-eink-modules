@@ -1,7 +1,7 @@
 #include "LCMEN2R13EFC1.h"
 
 // Where should the pixel be placed in the pagefile - overriden by derived display classes which do not support "partial window"
-void LCMEN2R13EFC1::calculatePixelPageOffset(uint16_t x, uint16_t y, uint16_t &byte_offset, uint8_t &bit_offset) {
+void LCMEN2R13EFC1::calculatePixelPageOffset(uint16_t x, uint16_t y, uint32_t &byte_offset, uint8_t &bit_offset) {
 
     // Instead of the "window" data being written at the very start of the pagefile, we're just putting it where it would normally go if fullscreen
 

@@ -30,7 +30,7 @@ bool BaseDisplay::calculating() {
         // Specify display region handled, either in paging, or outside loop
         page_top = winrot_top;
         page_bottom = min((uint16_t)((winrot_top + pagefile_height) - 1), winrot_bottom);
-        pagefile_length = (page_bottom - page_top + 1) * ((winrot_right - winrot_left + 1) / 8);
+        pagefile_length = (uint32_t) (page_bottom - page_top + 1) * ((winrot_right - winrot_left + 1) / 8);
 
         // This is usually just clearPage(), unless "partial window" is not supported
         clearPageWindow();
@@ -56,7 +56,7 @@ bool BaseDisplay::calculating() {
         // Calculate memory locations for the new page
         page_top += pagefile_height;
         page_bottom = min((uint16_t)((page_top + pagefile_height) - 1), winrot_bottom);
-        pagefile_length = (page_bottom - page_top + 1) * ((winrot_right - winrot_left+1) / 8);
+        pagefile_length = (uint32_t) (page_bottom - page_top + 1) * ((winrot_right - winrot_left+1) / 8);
     }
 
     // Check whether loop should continue
@@ -71,7 +71,7 @@ bool BaseDisplay::calculating() {
             // Reset page dimensions now, incase big MCU wants to draw outside loop
             page_top = winrot_top;
             page_bottom = min((uint16_t)((winrot_top + pagefile_height) - 1), winrot_bottom);
-            pagefile_length = (page_bottom - page_top + 1) * ((winrot_right - winrot_left + 1) / 8);
+            pagefile_length = (uint32_t) (page_bottom - page_top + 1) * ((winrot_right - winrot_left + 1) / 8);
         }
 
         // Fastmode OFF or TURBO, (single pass)
@@ -135,13 +135,13 @@ bool BaseDisplay::calculating() {
 // Clear the data arrays in between pages
 void BaseDisplay::clearPage() {
         uint8_t black_byte = (default_color & WHITE) * 255;    // We're filling in bulk here; bits are either all on or all off
-        for (uint16_t i = 0; i < page_bytecount; i++)
+        for (uint32_t i = 0; i < page_bytecount; i++)
             page_black[i] = black_byte;
 
         // Repeat for red
         if (supportsColor(RED)) {
             uint8_t red_byte = ((default_color & RED) >> 1) * 255;
-            for (uint16_t i = 0; i < page_bytecount; i++)
+            for (uint32_t i = 0; i < page_bytecount; i++)
                 page_red[i] = red_byte;
         }
 }

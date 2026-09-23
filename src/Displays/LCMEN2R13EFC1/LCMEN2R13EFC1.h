@@ -71,7 +71,7 @@ class LCMEN2R13EFC1 : public BaseDisplay {
         void sendImageData();                                                                               // Different SPI commands
         void sendBlankImageData();
         void wait();                                                                                        // Read busy pin, inverted for this controller
-        void calculatePixelPageOffset(uint16_t x, uint16_t y, uint16_t &byte_offset, uint8_t &bit_offset);  // No "partial window" support
+        void calculatePixelPageOffset(uint16_t x, uint16_t y, uint32_t &byte_offset, uint8_t &bit_offset);  // No "partial window" support
         void clearPageWindow();                                                                             // No "partial window" support
         void endImageTxQuiet() {}                                                                           // Apparently, no action required to terminate an image tx for this controller(?)
 

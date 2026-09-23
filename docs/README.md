@@ -285,6 +285,33 @@ Pay attention to the model name: you will need it to use the library.
     </tbody>
 </table>
 
+#### 10.2 Inch
+
+<table>
+    <thead>
+        <tr>
+            <th>Model Name</th>
+            <th>Colors</th>
+            <th>Resolution (px)</th>
+            <th><a href="#fast-mode-partial-refresh">Fastmode (partial&nbsp;refresh)</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>DEPG1020BNS770F1</strong></td>
+            <td>Black, White</td>
+            <td>960 x 640</td>
+            <td>No</td>
+        </tr>
+    </tbody>
+</table>
+
+`DEPG1020BNS770F1` requires a suitable SSD1677 driver board; do not connect the
+panel FPC directly to a microcontroller. This driver performs monochrome full-screen
+refreshes only, powers the driver board down after each refresh, and supports paging
+to avoid allocating the complete 76,800-byte framebuffer. A page height of 32 rows
+uses 3,840 bytes.
+
 ___
 
 ### Wiring

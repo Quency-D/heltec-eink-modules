@@ -1,7 +1,77 @@
 #include "E0213A367.h"
 
+void E0213A367::reset() {
+    if (!external_driver) {
+        BaseDisplay::reset();
+        return;
+    }
+
+    operation_timed_out = false;
+
+    pinMode(pin_enable, OUTPUT);
+    digitalWrite(pin_enable, enable_active);
+    delay(100);
+
+    pinMode(pin_reset, OUTPUT);
+    digitalWrite(pin_reset, LOW);
+    delay(10);
+    digitalWrite(pin_reset, HIGH);
+    delay(10);
+
+    wait();
+    if (operation_timed_out)
+        return;
+
+    sendCommand(0x12); // Software reset
+    wait();
+}
+
+void E0213A367::wait() {
+    if (!external_driver) {
+        BaseDisplay::wait();
+        return;
+    }
+
+    if (operation_timed_out)
+        return;
+
+    const uint32_t started_ms = millis();
+    while (digitalRead(pin_busy) == HIGH) {
+        if (millis() - started_ms >= busy_timeout_ms) {
+            operation_timed_out = true;
+            powerOff();
+            return;
+        }
+        delay(1);
+        yield();
+    }
+}
+
+void E0213A367::powerOff() {
+    if (external_driver)
+        digitalWrite(pin_enable, !enable_active);
+}
+
+void E0213A367::sendImageData() {
+    if (!operation_timed_out)
+        BaseDisplay::sendImageData();
+}
+
+void E0213A367::sendBlankImageData() {
+    if (!operation_timed_out)
+        BaseDisplay::sendBlankImageData();
+}
+
+void E0213A367::endImageTxQuiet() {
+    if (!operation_timed_out)
+        BaseDisplay::endImageTxQuiet();
+}
+
 // Inform the display of selected memory area
 void E0213A367::setMemoryArea(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey) {
+
+    if (operation_timed_out)
+        return;
 
     // Data entry mode - Left to Right, Top to Bottom
     sendCommand(0x11);
@@ -31,6 +101,9 @@ void E0213A367::calculateMemoryArea( int16_t &sx, int16_t &sy, int16_t &ex, int1
 }
 
 void E0213A367::activate() {
+    if (operation_timed_out)
+        return;
+
     // Specify the update operation to run
     sendCommand(0x22);
     

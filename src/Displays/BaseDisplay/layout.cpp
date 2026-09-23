@@ -178,7 +178,7 @@ void BaseDisplay::setWindow(uint16_t left, uint16_t top, uint16_t width, uint16_
             // Specify display region handled, either in paging, or outside loop
             page_top = winrot_top;
             page_bottom = min((uint16_t)((winrot_top + pagefile_height) - 1), winrot_bottom);
-            pagefile_length = (page_bottom - page_top + 1) * ((winrot_right - winrot_left + 1) / 8);
+            pagefile_length = (uint32_t) (page_bottom - page_top + 1) * ((winrot_right - winrot_left + 1) / 8);
 
             if (clear_page)
                 clearPageWindow();  // This is *usually* just clearPage(), unless "partial window" is not supported.
